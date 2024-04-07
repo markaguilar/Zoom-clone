@@ -3,14 +3,16 @@
 import React, { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useStreamVideoClient } from "@stream-io/video-react-sdk";
+import { Call } from "@stream-io/node-sdk";
+import { useRouter } from "next/navigation";
 
 import HomeCard from "@/components/HomeCard";
-import { useRouter } from "next/navigation";
 import MeetingModal from "@/components/MeetingModal";
-import { Call } from "@stream-io/node-sdk";
+import { useToast } from "@/components/ui/use-toast";
 
 const MeetingTypeList = () => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const [meetingState, setMeetingState] = useState<
     "isScheduleMeeting" | "isJoiningMeeting" | "isInstantMeeting" | undefined
@@ -29,6 +31,12 @@ const MeetingTypeList = () => {
     if (!client || !user) return;
 
     try {
+      if (!values.dateTime) {
+        toast({
+          title: "Please enter a valid date time",
+        });
+        return;
+      }
       const id = crypto.randomUUID();
       const call = client.call("default", id);
 
@@ -52,8 +60,14 @@ const MeetingTypeList = () => {
       if (!values.description) {
         router.push(`/meeting/${call.id}`);
       }
+      toast({
+        title: "Meeting Created",
+      });
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Failed to create meeting",
+      });
     }
   };
 
