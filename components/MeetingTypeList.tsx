@@ -3,14 +3,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ReactDatePicker from "react-datepicker";
+import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
+import { useUser } from "@clerk/nextjs";
 
 import HomeCard from "./HomeCard";
 import MeetingModal from "./MeetingModal";
-import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
-import { useUser } from "@clerk/nextjs";
 import Loader from "./Loader";
+
 import { Textarea } from "./ui/textarea";
-import ReactDatePicker from "react-datepicker";
 import { useToast } from "./ui/use-toast";
 import { Input } from "./ui/input";
 
@@ -76,6 +77,7 @@ const MeetingTypeList = () => {
         title="New Meeting"
         description="Start an instant meeting"
         handleClick={() => setMeetingState("isInstantMeeting")}
+        className="bg-orange-1"
       />
       <HomeCard
         img="/icons/join-meeting.svg"
